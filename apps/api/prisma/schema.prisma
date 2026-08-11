@@ -14,3 +14,14 @@ model User{
   email String @unique
   name String
   }
+
+model Product{
+  id Int @id @default(autoincrement())
+  name String
+  price Decimal
+  stock Int
+  isActive Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+}
