@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { supabase } from "../lib/supabase";
 
 export default function SignUp() {
   const [error, setError] = useState("");
@@ -23,7 +24,7 @@ export default function SignUp() {
 
         <form
           className="signup-form"
-          onSubmit={(event) => {
+          onSubmit={async (event) => {
             event.preventDefault();
 
             const form = event.currentTarget;
@@ -34,18 +35,34 @@ export default function SignUp() {
             const password = formData.get("password");
             const confirmPassword = formData.get("confirmPassword");
 
+            if (
+              typeof name !== "string" ||
+              typeof email !== "string" ||
+              typeof password !== "string" || 
+              typeof confirmPassword !== "string"
+            ) {
+              setError("Invalid form data");
+              return;
+            }
+
             if (password !== confirmPassword) {
               setError("Incorrect Password");
               return;
             }
 
+            
             setError("");
+            
+            const { data, error } = await supabase.auth.signUp({
+              email,
+              password,
+            });
 
             console.log({
               name,
               email,
-              password,
-              confirmPassword,
+              data,
+              error
             });
           }}
         >
@@ -65,6 +82,7 @@ export default function SignUp() {
               id="email"
               name="email"
               type="email"
+              required
               placeholder="you@example.com"
               autoComplete="email"
             />
@@ -87,8 +105,8 @@ export default function SignUp() {
               type="password"
               placeholder="Repeat your password"
               autoComplete="new-password"
-              />
-              {error && <p className="error-txt">{error}</p>}
+            />
+            {error && <p className="error-txt">{error}</p>}
           </label>
           <button type="submit">
             Create account <span aria-hidden="true">→</span>
