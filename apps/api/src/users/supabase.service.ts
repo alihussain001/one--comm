@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, User } from '@supabase/supabase-js';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
@@ -6,13 +6,21 @@ import { ConfigService } from '@nestjs/config';
 export class SupabaseService {
   private supabase;
 
-  constructor(private configService: ConfigService) {
+  constructor(private  readonly configService: ConfigService) {
     this.supabase = createClient(
       this.configService.getOrThrow<string>('SUPABASE_URL'),
       this.configService.getOrThrow<string>('SUPABASE_SECRET_KEY'),
     );
   }
-  getUser(token: string){
-    return this.supabase.auth.getUser(token); 
+  async getUser(token: string): Promise<User>{
+    const {data, error} = await this.supabase.auth.getUser(token);
+
+    console.log('SUPABASE USER:', data.user);
+    console.log('SUPABASE ERROR:', error);
+    
+    if (error || !data.user) {
+      throw new Error('Invalid or expired token');
+    }
+    return data.user;
   }
 }

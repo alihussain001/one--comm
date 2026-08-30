@@ -53,17 +53,27 @@ export default function SignUp() {
             
             setError("");
             
+            
+              // const {data, error} = await supabase.auth.signInWithPassword({
+              //   email,
+              //   password
+              // })
+            
             const { data, error } = await supabase.auth.signUp({
               email,
               password,
             });
 
+
             console.log({
               name,
               email,
               data,
-              error
+              error,
             });
+            // console.log("Session", data.session);
+            // console.log("JWT", data.session?.access_token);
+            // console.log("Error", error);
           }}
         >
           <label htmlFor="name">
