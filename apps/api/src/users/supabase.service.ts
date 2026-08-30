@@ -14,9 +14,6 @@ export class SupabaseService {
   }
   async getUser(token: string): Promise<User>{
     const {data, error} = await this.supabase.auth.getUser(token);
-
-    console.log('SUPABASE USER:', data.user);
-    console.log('SUPABASE ERROR:', error);
     
     if (error || !data.user) {
       throw new Error('Invalid or expired token');
