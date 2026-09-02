@@ -1,53 +1,52 @@
-
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider     = "prisma-client"
+  output       = "../generated/prisma"
+  moduleFormat = "cjs"
 }
 
 datasource db {
   provider = "postgresql"
 }
 
-enum PaymentMethod{
-  COD 
+enum PaymentMethod {
+  COD
   ONLINE
 }
 
-model User{
-  id  Int @id @default(autoincrement())
-  authUserId String @unique 
-  email String @unique
-  name String
-  orders Order[]
-  }
-
-model Product{
-  id Int @id @default(autoincrement())
-  name String
-  price Decimal
-  stock Int
-  isActive Boolean @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  orderItems OrderItem[]
-
+model User {
+  id         Int     @id @default(autoincrement())
+  authUserId String  @unique
+  email      String  @unique
+  name       String
+  orders     Order[]
 }
 
-model Order{
-  id Int @id @default(autoincrement())
-  userId Int
-  user User @relation(fields: [userId], references: [id])
+model Product {
+  id         Int         @id @default(autoincrement())
+  name       String
+  price      Decimal
+  stock      Int
+  isActive   Boolean     @default(true)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  orderItems OrderItem[]
+}
+
+model Order {
+  id            Int           @id @default(autoincrement())
+  userId        Int
+  user          User          @relation(fields: [userId], references: [id])
   paymentMethod PaymentMethod
-  totalAmount Decimal
-  orderItems OrderItem[]
+  totalAmount   Decimal
+  orderItems    OrderItem[]
 }
 
-model OrderItem{
-  id Int @id @default(autoincrement())
-  orderId Int
-  order Order @relation(fields: [orderId], references: [id])
+model OrderItem {
+  id        Int     @id @default(autoincrement())
+  orderId   Int
+  order     Order   @relation(fields: [orderId], references: [id])
   productId Int
-  product Product @relation(fields: [productId], references: [id])
-  quantity Int
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int
   unitPrice Decimal
 }
