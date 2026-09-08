@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { supabase } from "../lib/supabase";
 
-export default function SignUp() {
+interface SignUpProps {
+  onNavigateToLogin?: () => void;
+}
+
+export default function SignUp({ onNavigateToLogin }: SignUpProps) {
   const [error, setError] = useState("");
 
   return (
@@ -124,7 +128,18 @@ export default function SignUp() {
         </form>
 
         <p className="signin-prompt">
-          Already have an account? <a href="#sign-in">Sign in</a>
+          Already have an account?{" "}
+          <a
+            href="#sign-in"
+            onClick={(e) => {
+              if (onNavigateToLogin) {
+                e.preventDefault();
+                onNavigateToLogin();
+              }
+            }}
+          >
+            Sign in
+          </a>
         </p>
       </section>
     </main>
