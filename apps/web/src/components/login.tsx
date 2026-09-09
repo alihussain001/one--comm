@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { supabase } from "../lib/supabase";
 
 interface LoginProps {
   onNavigateToSignup?: () => void;
@@ -10,8 +11,10 @@ export default function Login({ onNavigateToSignup }: LoginProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    // for supabase login 
 
     // Basic UI validation
     if (!email.trim() && !password.trim()) {
@@ -35,9 +38,18 @@ export default function Login({ onNavigateToSignup }: LoginProps) {
       return;
     }
 
-    // Clear error if validation passes
     setError("");
-    alert(`Form submitted for: ${email}`);
+    
+        const {data, error} =  await   supabase.auth.signInWithPassword({
+          email,
+          password
+        });
+
+        if(error){
+          setError(error.message);
+          return;
+        } 
+        console.log("login succesful", data)
   };
 
   return (
