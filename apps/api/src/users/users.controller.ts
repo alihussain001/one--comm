@@ -3,6 +3,7 @@ import { UsersService } from './users.service';
 import {
   Body,
   Controller,
+  Get,
   Post,
   Req,
   Request,
@@ -10,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { Prisma } from 'generated/prisma/browser';
 import { UserModel } from 'generated/prisma/models';
-import { SupabaseService } from './supabase.service';
+import { SupabaseService } from '../supabase/supabase.service';
 
 @Controller('users')
 export class UsersController {
@@ -28,5 +29,10 @@ export class UsersController {
       email: request.user.email,
       name,
     });
+  }
+
+  @Get()
+  async getUser(){
+    return this.userService.getUser();
   }
 }

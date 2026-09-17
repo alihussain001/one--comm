@@ -20,4 +20,5 @@ export class SupabaseService {
     }
     return data.user;
   }
+
 }

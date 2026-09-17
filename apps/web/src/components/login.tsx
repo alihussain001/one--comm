@@ -14,7 +14,7 @@ export default function Login({ onNavigateToSignup }: LoginProps) {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // for supabase login 
+    // for supabase login
 
     // Basic UI validation
     if (!email.trim() && !password.trim()) {
@@ -39,17 +39,17 @@ export default function Login({ onNavigateToSignup }: LoginProps) {
     }
 
     setError("");
-    
-        const {data, error} =  await   supabase.auth.signInWithPassword({
-          email,
-          password
-        });
 
-        if(error){
-          setError(error.message);
-          return;
-        } 
-        console.log("login succesful", data)
+    const {data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    });
+
+    if (error){
+      setError(error.message);
+      return;
+    }
+    console.log("User login sucessfully", data);
   };
 
   return (

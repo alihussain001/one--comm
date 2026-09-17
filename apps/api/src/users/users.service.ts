@@ -10,4 +10,8 @@ export class UsersService {
         data,
     })
     }
+
+    async getUser(){
+        return this.getUser();
+    }
 }
