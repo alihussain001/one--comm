@@ -9,4 +9,9 @@ export class ProductController {
     async getProductById(@Param('id', ParseIntPipe) id: number){
         return this.productService.findProductById(id)
     }
+
+    @Get()
+    async getAllProducts(){
+        return this.productService.getAllProducts();
+    }
 }
