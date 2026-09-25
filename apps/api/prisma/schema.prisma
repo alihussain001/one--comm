@@ -23,8 +23,8 @@ model User {
 
 model Product {
   id         Int         @id @default(autoincrement())
-  name       String
-  price      Decimal
+  name       String 
+  price      Decimal 
   stock      Int
   isActive   Boolean     @default(true)
   createdAt  DateTime    @default(now())
