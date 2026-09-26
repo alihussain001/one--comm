@@ -2,7 +2,7 @@ import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { ProductResponseDto } from './DTO/productResponseDto';
 
-@Controller('product')
+@Controller('products')
 export class ProductController {
     constructor(private readonly productService: ProductService){}
 

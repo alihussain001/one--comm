@@ -25,15 +25,14 @@ export class ProductService {
     
   }
 
-   async getAllProducts(): Promise<ProductResponseDto[]> {
-   const products = await this.prismaService.product.findMany(); 
+  async getAllProducts(): Promise<ProductResponseDto[]>{
+    const products = await this.prismaService.product.findMany();
 
-   return products.map((product) => ({
-    id: product.id,
-    name: product.name,
-    price: product.price.toString(),
-    stock: product.stock,
-   }))
-  
+    return products.map((product) => ({
+      id: product.id,
+      name: product.name,
+      price: product.price.toString(),
+      stock: product.stock,
+    }))
   }
 }
