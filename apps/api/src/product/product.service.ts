@@ -21,7 +21,7 @@ export class ProductService {
       price: product.price.toString(),
       stock: product.stock,
     }
-
+    
     
   }
 

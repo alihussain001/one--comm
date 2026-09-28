@@ -38,7 +38,7 @@ model Order {
   user          User          @relation(fields: [userId], references: [id])
   paymentMethod PaymentMethod
   totalAmount   Decimal
-  orderItems    OrderItem[]
+  orderItems    OrderItem[] 
 }
 
 model OrderItem {
