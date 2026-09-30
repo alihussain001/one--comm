@@ -1,7 +1,9 @@
 import { PrismaService } from './../prisma/prisma.service';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Param } from '@nestjs/common';
 import { ProductResponseDto } from './DTO/productResponseDto';
 import { CreateProductDto } from './DTO/createProductDto';
+import { UpdateProductDto } from './DTO/updateProductDto';
+import { Prisma } from 'generated/prisma/client';
 
 @Injectable()
 export class ProductService {
@@ -43,5 +45,24 @@ export class ProductService {
       price: newProduct.price.toString(),
       stock: newProduct.stock,
     };
+  }
+
+  async updateProduct(params: {
+    where: Prisma.ProductWhereUniqueInput;
+    data: Prisma.ProductUpdateInput;
+  }){
+    const {data, where } = params;
+
+    const updatedProduct = await this.prismaService.product.update({
+      where,
+      data
+    })
+
+    return{
+      id: updatedProduct.id,
+      name: updatedProduct.name,
+      price: updatedProduct.price,
+      stock: updatedProduct.stock
+    }
   }
 }
