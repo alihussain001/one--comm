@@ -5,5 +5,6 @@ export class ProductResponseDto{
     name?: string;
     price?: string;
     stock?:number;
+    isActive?: boolean;
 
 }

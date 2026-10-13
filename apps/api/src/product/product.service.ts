@@ -4,6 +4,7 @@ import { ProductResponseDto } from './DTO/productResponseDto';
 import { CreateProductDto } from './DTO/createProductDto';
 import { UpdateProductDto } from './DTO/updateProductDto';
 import { Prisma } from 'generated/prisma/client';
+import { error } from 'node:console';
 
 @Injectable()
 export class ProductService {
@@ -14,6 +15,7 @@ export class ProductService {
       where: {
         id,
       },
+      
     });
     if (!product) {
       throw new NotFoundException('Product does not exist');
@@ -23,6 +25,7 @@ export class ProductService {
       name: product.name,
       price: product.price.toString(),
       stock: product.stock,
+      isActive: product.isActive
     };
   }
 
@@ -37,7 +40,7 @@ export class ProductService {
     }));
   }
 
-  async createProduct(data: CreateProductDto): Promise<ProductResponseDto>{
+  async createProduct(data: CreateProductDto): Promise<ProductResponseDto> {
     const newProduct = await this.prismaService.product.create({ data });
     return {
       id: newProduct.id,
@@ -47,22 +50,57 @@ export class ProductService {
     };
   }
 
-  async updateProduct(params: {
-    where: Prisma.ProductWhereUniqueInput;
-    data: Prisma.ProductUpdateInput;
-  }){
-    const {data, where } = params;
+  async updateProduct(
+    id: number,
+    data: UpdateProductDto,
+  ): Promise<ProductResponseDto> {
+    try {
+      const updateProduct = await this.prismaService.product.update({
+        where: { id },
+        data,
+      });
+      return {
+        id: updateProduct.id,
+        name: updateProduct.name,
+        price: updateProduct.price.toString(),
+        stock: updateProduct.stock,
+      };
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') {
+          throw new NotFoundException('Product not found!');
+        }
+      }
 
-    const updatedProduct = await this.prismaService.product.update({
-      where,
-      data
-    })
+      throw error;
+    }
+  }
 
-    return{
-      id: updatedProduct.id,
-      name: updatedProduct.name,
-      price: updatedProduct.price,
-      stock: updatedProduct.stock
+  async deactivateProduct(id: number): Promise<ProductResponseDto> {
+    try {
+      const deactivatedProduct = await this.prismaService.product.update({
+        where: {
+          id,
+        },
+        data: {
+          isActive: false,
+        },
+      });
+      return {
+        id: deactivatedProduct.id,
+        name: deactivatedProduct.name,
+        price: deactivatedProduct.price.toString(),
+        stock: deactivatedProduct.stock,
+        isActive: deactivatedProduct.isActive,
+      };
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2025') {
+          throw new NotFoundException('Product not found!');
+        }
+      }
+
+      throw error;
     }
   }
 }
