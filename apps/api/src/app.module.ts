@@ -6,7 +6,6 @@ import { ConfigModule } from '@nestjs/config';
 import { ProductModule } from './product/product.module';
 import { OrderModule } from './order/order.module';
 import { AddressModule } from './address/address.module';
-import { AdderssService } from './adderss/adderss.service';
 
 @Module({
   imports: [
@@ -19,6 +18,6 @@ import { AdderssService } from './adderss/adderss.service';
     AddressModule,
   ],
   controllers: [AppController],
-  providers: [AppService, AdderssService],
+  providers: [AppService],
 })
 export class AppModule {}
