@@ -2,7 +2,6 @@ import {
   BadRequestException,
   Body,
   Controller,
-  Get,
   Headers,
   Post,
 } from '@nestjs/common';
@@ -22,6 +21,6 @@ export class OrderController {
         message: 'Idempotency-Key header is required',
       });
     }
-    return{message: 'Idempotency key validated successfully'}
+    return { message: 'Idempotency key validated successfully' };
   }
 }

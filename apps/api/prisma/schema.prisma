@@ -19,6 +19,7 @@ model User {
   email      String  @unique
   name       String
   orders     Order[]
+  addresses Address[]
 }
 
 model Product {
@@ -39,6 +40,8 @@ model Order {
   paymentMethod PaymentMethod
   totalAmount   Decimal
   orderItems    OrderItem[] 
+  addressId Int
+  address Address @relation(fields: [addressId], references: [id], onDelete: Restrict)
 }
 
 model OrderItem {
@@ -49,4 +52,23 @@ model OrderItem {
   product   Product @relation(fields: [productId], references: [id])
   quantity  Int
   unitPrice Decimal
+}
+
+model Address{
+  id Int  @id @default(autoincrement())
+  userId Int
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  line1 String
+  line2 String?
+  city String
+  state String
+  postalCode String
+  phone String
+  isDefault Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  orders Order[]
+
+  @@index([userId])
+  @@map("addresses")
 }
