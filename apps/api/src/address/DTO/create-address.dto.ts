@@ -11,11 +11,11 @@ export class CreateAddressDto {
 
   @IsString()
   @IsNotEmpty()
-  state!: string
+  state!: string;
 
   @IsString()
   @IsNotEmpty()
-  city!: string
+  city!: string;
 
   @IsString()
   @IsNotEmpty()
@@ -26,9 +26,9 @@ export class CreateAddressDto {
   @Matches(/^\+[1-9]\d{1,14}$/, {
     message: 'Phone number must be a valid E.164 format (e.g., +923001234567)',
   })
-  phone!: string
+  phone!: string;
 
   @IsBoolean()
   @IsOptional()
-  isDefault?: boolean
+  isDefault?: boolean;
 }

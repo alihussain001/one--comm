@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { ProductModule } from './product/product.module';
 import { OrderModule } from './order/order.module';
 import { AddressModule } from './address/address.module';
+import { SupabaseModule } from './supabase/supabase.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { AddressModule } from './address/address.module';
     ProductModule,
     OrderModule,
     AddressModule,
+    SupabaseModule,
   ],
   controllers: [AppController],
   providers: [AppService],

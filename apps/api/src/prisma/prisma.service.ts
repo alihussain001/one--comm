@@ -5,6 +5,7 @@ import { PrismaClient } from "generated/prisma/client";
 
 @Injectable()
 export class PrismaService extends PrismaClient{
+    address: any;
     constructor(){
         const adapter = new PrismaPg({connectionString: process.env.DIRECT_URL });
         super({ adapter });

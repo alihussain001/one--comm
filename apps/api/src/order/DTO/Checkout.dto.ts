@@ -19,5 +19,5 @@ export class CheckOutDto {
 
   @IsString()
   @IsNotEmpty()
-  shippingAddressId!: string
+  shippingAddressId!: string;
 }
