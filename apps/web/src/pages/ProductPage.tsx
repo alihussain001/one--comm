@@ -4,6 +4,9 @@ import Footer from '../components/layout/Footer';
 import HeroBanner from '../components/sections/HeroBanner';
 import PerksBar from '../components/sections/PerksBar';
 import CategoryStrip from '../components/sections/CategoryStrip';
+import BestDeals from '../components/sections/BestDeals';
+import FeaturedPromos from '../components/sections/FeaturedPromos';
+import BrandStores from '../components/sections/BrandStores';
 import ProductGrid from '../components/sections/ProductGrid';
 import { useAuth } from '../auth/AuthContext';
 import type { CatalogProduct } from '../data/products';
@@ -70,6 +73,17 @@ export default function ProductPage() {
             onSeeAll={handleSeeAllCategories}
           />
         </div>
+
+        {/* 4.5 Best Deals */}
+        <div id="deals">
+          <BestDeals onAddToCart={handleAddToCart} />
+        </div>
+
+        {/* 4.6 Featured Promos */}
+        <FeaturedPromos onShopNow={(id) => console.log('Promo clicked:', id)} />
+
+        {/* 4.7 Brand Stores */}
+        <BrandStores />
 
         {/* 5. Products Section (Tabs + Asymmetric Cards Grid) */}
         <div id="products">

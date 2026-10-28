@@ -11,22 +11,22 @@ export default function CategoryStrip({
   onSeeAll,
 }: CategoryStripProps) {
   return (
-    <section className="mx-auto max-w-6xl px-4 md:px-6 pt-16 pb-12">
+    <section className="mx-auto max-w-7xl px-4 py-12 md:px-6 md:py-16">
       {/* Header Row */}
-      <div className="flex items-center justify-between mb-8">
-        <h2 className="text-xl md:text-2xl font-bold tracking-tight text-[#111827]">
-          Headphone Categories
+      <div className="mb-8 flex items-center justify-between">
+        <h2 className="text-2xl font-bold tracking-tight text-gray-900 md:text-3xl">
+          Explore Popular Categories
         </h2>
 
         <button
           type="button"
           onClick={onSeeAll}
-          className="inline-flex items-center gap-1.5 rounded-full bg-[#5003C0] px-4 py-1.5 text-xs font-semibold text-white shadow-sm transition-all duration-150 hover:bg-[#4302a2] active:scale-95"
+          className="hidden items-center gap-1.5 text-sm font-semibold text-gray-900 transition-colors duration-150 hover:text-primary sm:inline-flex"
         >
           <span>See All</span>
           <svg
-            width="12"
-            height="12"
+            width="14"
+            height="14"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -41,8 +41,8 @@ export default function CategoryStrip({
         </button>
       </div>
 
-      {/* Category Tiles Grid / Horizontal Row */}
-      <div className="grid grid-cols-3 sm:grid-cols-6 gap-4 sm:gap-6">
+      {/* Category cards row (scrollable on small screens) */}
+      <div className="-mx-4 flex gap-4 overflow-x-auto px-4 pb-2 snap-x snap-mandatory scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden md:grid md:grid-cols-4 md:overflow-visible md:px-0">
         {CATEGORIES.map((cat) => (
           <CategoryCard
             key={cat.id}
