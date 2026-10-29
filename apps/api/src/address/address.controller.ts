@@ -1,4 +1,4 @@
-import { Body, Controller, Param, ParseIntPipe, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Req, UseGuards } from '@nestjs/common';
 import { AddressService } from './address.service';
 import { CreateAddressDto } from './DTO/create-address.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
@@ -13,5 +13,11 @@ export class AddressController {
         const authUserId: string = req.user.id;
 
         return this.addressService.createAddress(body, authUserId);
+    }
+
+    @UseGuards(AuthGuard)
+    @Get(':id')
+    getAddressById(@Param('id', ParseIntPipe) id: number){
+        return this.addressService.getAddressById(id)
     }
 }
