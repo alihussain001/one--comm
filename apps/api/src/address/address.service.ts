@@ -60,6 +60,7 @@ export class AddressService {
       where: {
         id,
         userId: user.id,
+        isDeleted: false
       },
     });
     if (!address) {
@@ -90,17 +91,18 @@ export class AddressService {
     const address = await this.prismaService.address.findFirst({
       where: {
         id,
-        userId: userId.id
+        userId: userId.id,
+        isDeleted: false
       },
     });
-    if(!address){
-        throw new NotFoundException('Address not found');
+    if (!address) {
+      throw new NotFoundException('Address not found');
     }
 
     const updateAddress = await this.prismaService.address.update({
-        where:{id: address.id},
-        data
-    })
+      where: { id: address.id },
+      data,
+    });
     return {
       id: updateAddress.id,
       line1: updateAddress.line1,
@@ -112,4 +114,40 @@ export class AddressService {
       isDefalut: updateAddress.isDefault,
     };
   }
+
+  async deleteAddress(authUserId: string, id: number) {
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        authUserId,
+      },
+    });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    const address = await this.prismaService.address.findFirst({
+      where: {
+        id,
+        userId: user.id,
+        isDeleted: false
+      },
+    });
+    if(!address){
+        throw new NotFoundException('Address not found');
+    }
+
+    await this.prismaService.address.update({
+        where:{
+            id: address.id
+        },
+        data:{
+            isDeleted: true,
+            isDefault: false,
+        }
+    });
+
+    return{
+        message: "Address deleted successfully!"
+    }
+  }
+
 }

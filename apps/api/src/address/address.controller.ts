@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -41,4 +42,11 @@ export class AddressController {
   ) {
     return this.addressService.updateAddress(body, req.user.id, id);
   }
+
+  @UseGuards(AuthGuard)
+  @Delete(':id')
+  async deleteAddress(@Param('id', ParseIntPipe) id:number, @Req() req: any ){
+    return this.addressService.deleteAddress( req.user.id, id)
+  }
+
 }
