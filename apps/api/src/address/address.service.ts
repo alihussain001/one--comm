@@ -3,6 +3,7 @@ import { CreateAddressDto } from './DTO/create-address.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { identity } from 'rxjs';
 import { create } from 'domain';
+import { UpdateAddressDto } from './DTO/update-address.dto';
 
 @Injectable()
 export class AddressService {
@@ -73,6 +74,42 @@ export class AddressService {
       postalCode: address.postalCode,
       phone: address.phone,
       isDefault: address.isDefault,
+    };
+  }
+
+  async updateAddress(data: UpdateAddressDto, authUserId: string, id: number) {
+    const userId = await this.prismaService.user.findUnique({
+      where: {
+        authUserId,
+      },
+    });
+    if (!userId) {
+      throw new NotFoundException('User not found');
+    }
+
+    const address = await this.prismaService.address.findFirst({
+      where: {
+        id,
+        userId: userId.id
+      },
+    });
+    if(!address){
+        throw new NotFoundException('Address not found');
+    }
+
+    const updateAddress = await this.prismaService.address.update({
+        where:{id: address.id},
+        data
+    })
+    return {
+      id: updateAddress.id,
+      line1: updateAddress.line1,
+      line2: updateAddress.line2,
+      state: updateAddress.state,
+      city: updateAddress.city,
+      postalCode: updateAddress.postalCode,
+      phone: updateAddress.phone,
+      isDefalut: updateAddress.isDefault,
     };
   }
 }
