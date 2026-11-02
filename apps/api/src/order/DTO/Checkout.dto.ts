@@ -2,12 +2,19 @@ import {
   ArrayMaxSize,
   ArrayMinSize,
   IsArray,
+  IsEnum,
   IsNotEmpty,
+  IsOptional,
   IsString,
+  MaxLength,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { CheckOutItemDto } from './CheckoutItem.dto';
+
+export enum PaymentMethod{
+  COD='COD',
+}
 
 export class CheckOutDto {
   @IsArray()
@@ -20,4 +27,13 @@ export class CheckOutDto {
   @IsString()
   @IsNotEmpty()
   shippingAddressId!: string;
+
+  @IsEnum(PaymentMethod)
+  paymentMethod!: PaymentMethod
+
+  @IsString()
+  @IsOptional()
+  @MaxLength(500, {message: "Note can not exceed 500 characters."})
+  notes?: string
+
 }

@@ -1,9 +1,9 @@
-import { IsInt, IsNotEmpty, IsNumber, IsPositive, IsString, Max, Min } from "class-validator";
+import { IsInt, IsNotEmpty, IsPositive, Max, Min } from "class-validator";
 
 export class CheckOutItemDto{
-    @IsString()
-    @IsNotEmpty()
-    productId!: string
+    @IsInt()
+    @IsPositive()
+    productId!: number
 
     @IsInt()
     @Min(1)

@@ -7,20 +7,14 @@ import {
 } from '@nestjs/common';
 import { CheckOutDto } from './DTO/Checkout.dto';
 
-@Controller('order')
+@Controller('orders')
 export class OrderController {
+
   @Post()
-  checkOut(
-    @Body() checkoutDto: CheckOutDto,
-    @Headers('Idempotency-key') idempotencyKey?: string,
-  ) {
-    if (!idempotencyKey?.trim()) {
-      throw new BadRequestException({
-        statusCode: 400,
-        code: 'IDEMPOTENCY_KEY_REQUIRED',
-        message: 'Idempotency-Key header is required',
-      });
-    }
-    return { message: 'Idempotency key validated successfully' };
+  async checkOut(@Body() body: CheckOutDto) {
+    return {
+      message: 'DTO validation successfull',
+      data: body
+    };
   }
 }
