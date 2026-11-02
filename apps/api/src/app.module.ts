@@ -7,6 +7,7 @@ import { ProductModule } from './product/product.module';
 import { OrderModule } from './order/order.module';
 import { AddressModule } from './address/address.module';
 import { SupabaseModule } from './supabase/supabase.module';
+import { CheckoutModule } from './checkout/checkout.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { SupabaseModule } from './supabase/supabase.module';
     OrderModule,
     AddressModule,
     SupabaseModule,
+    CheckoutModule,
   ],
   controllers: [AppController],
   providers: [AppService],
