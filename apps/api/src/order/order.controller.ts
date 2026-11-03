@@ -1,11 +1,9 @@
 import {
-  BadRequestException,
   Body,
   Controller,
-  Headers,
   Post,
 } from '@nestjs/common';
-import { CheckOutDto } from './DTO/Checkout.dto';
+import { CheckOutDto } from '../checkout/DTO/Checkout.dto';
 
 @Controller('orders')
 export class OrderController {
@@ -18,3 +16,5 @@ export class OrderController {
     };
   }
 }
+
+
