@@ -4,7 +4,6 @@ import { ProductResponseDto } from './DTO/productResponseDto';
 import { CreateProductDto } from './DTO/createProductDto';
 import { UpdateProductDto } from './DTO/updateProductDto';
 import { Prisma } from 'generated/prisma/client';
-import { error } from 'node:console';
 
 @Injectable()
 export class ProductService {

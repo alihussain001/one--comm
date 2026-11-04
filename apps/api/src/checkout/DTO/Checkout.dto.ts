@@ -3,6 +3,8 @@ import {
   ArrayMinSize,
   IsArray,
   IsEnum,
+  IsIn,
+  IsInt,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -24,9 +26,9 @@ export class CheckOutDto {
   @Type(() => CheckOutItemDto)
   items!: CheckOutItemDto[];
 
-  @IsString()
+  @IsInt()
   @IsNotEmpty()
-  shippingAddressId!: string;
+  shippingAddressId!: number;
 
   @IsEnum(PaymentMethod)
   paymentMethod!: PaymentMethod
