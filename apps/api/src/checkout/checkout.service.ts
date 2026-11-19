@@ -3,7 +3,6 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
-  ParseIntPipe,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Prisma } from 'generated/prisma/browser';
@@ -89,6 +88,9 @@ export class CheckoutService {
           throw new NotFoundException('One or more product were not found');
         }
         
+        
+        // chech-out total
+        let totalAmount = new Prisma.Decimal(0);
 
         for(const item of dto.items){
             const currentProduct = product.find((p) => p.id === item.productId);
@@ -98,23 +100,26 @@ export class CheckoutService {
             }
 
         if(item.quantity > currentProduct.stock){
-            throw new ConflictException(`Insufficient stock for ${currentProduct.name}` )
+            throw new ConflictException(`Insufficient stock for ${currentProduct.name}` );
         }
+
+
+
+        const subtotal = currentProduct.price.mul(item.quantity);
+
+        totalAmount = totalAmount.plus(subtotal);
+
+        const orderItems: Prisma.OrderItemUncheckedCreateWithoutOrderInput[] = [];
+
+        orderItems.push({
+          productId: currentProduct.id,
+          productName: currentProduct.name,
+          quantity: item.quantity,
+          unitPrice:   currentProduct.price
+        });
         }
 
-    //     for (const item of dto.items) {
-    //     const currentProduct = product.find((p) => p.id === item.productId);
-
-    //     if (!currentProduct) {
-    //       throw new NotFoundException(`Product ${item.productId} not found`);
-    //     }
-
-    //     if (item.quantity > currentProduct.stock) {
-    //       throw new ConflictException(
-    //         `Insufficient stock for ${currentProduct.name}`,
-    //       );
-    //     }
-    //   }
+        
     });
   }
 }
