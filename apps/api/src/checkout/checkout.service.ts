@@ -8,6 +8,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { Prisma } from 'generated/prisma/browser';
 import { CheckOutItemDto } from './DTO/CheckoutItem.dto';
 import { CheckOutDto } from './DTO/Checkout.dto';
+import { randomBytes } from 'crypto';
 
 @Injectable()
 export class CheckoutService {
@@ -92,6 +93,8 @@ export class CheckoutService {
         // chech-out total
         let totalAmount = new Prisma.Decimal(0);
 
+        // order-items
+        const orderItems: Prisma.OrderItemUncheckedCreateWithoutOrderInput[] = [];
         for(const item of dto.items){
             const currentProduct = product.find((p) => p.id === item.productId);
 
@@ -109,7 +112,7 @@ export class CheckoutService {
 
         totalAmount = totalAmount.plus(subtotal);
 
-        const orderItems: Prisma.OrderItemUncheckedCreateWithoutOrderInput[] = [];
+
 
         orderItems.push({
           productId: currentProduct.id,
@@ -119,7 +122,51 @@ export class CheckoutService {
         });
         }
 
-        
+        // atomic decrement stock 
+        await this.processStockItems(tx, dto.items);
+
+        // unique order number generate
+        const orderNumber = await this.generateOrderNumber(tx);
+
+        // Create Order with nested order items 
+        const order = await tx.order.create({
+          data:{
+            orderNumber,
+            userId,
+            paymentMethod: dto.paymentMethod,
+            totalAmount,
+            addressId: address.id,
+            orderItems:{
+              create: orderItems,
+            },
+          },
+          include:{
+              orderItems: true,
+          },
+        });
+
+        return order;
+
     });
   }
+
+  async generateOrderNumber(tx: Prisma.TransactionClient):Promise<string>{
+    const date = new Date().toISOString().slice(0,10).replace(/-/g, '');
+
+    let orderNumber: string;
+    let exists: {id: number} | null;
+
+    do {
+      const suffix = randomBytes(3).toString('hex').toUpperCase();
+      orderNumber = `ORD-${date}-${suffix}`;
+
+      exists = await tx.order.findUnique({
+        where: { orderNumber },
+        select: { id: true },
+      });
+    } while (exists);
+
+    return orderNumber;
+  }
 }
+
