@@ -35,6 +35,7 @@ model Product {
 
 model Order {
   id            Int           @id @default(autoincrement())
+  idempotencyKey String?
   orderNumber String  @unique
   userId        Int
   user          User          @relation(fields: [userId], references: [id])
@@ -43,6 +44,8 @@ model Order {
   orderItems    OrderItem[] 
   addressId Int
   address Address @relation(fields: [addressId], references: [id], onDelete: Restrict)
+
+  @@unique([userId, idempotencyKey])
 }
 
 model OrderItem {
