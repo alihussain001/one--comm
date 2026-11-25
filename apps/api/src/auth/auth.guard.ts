@@ -2,6 +2,7 @@
 import {
   CanActivate,
   ExecutionContext,
+  ForbiddenException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -52,9 +53,10 @@ export class AuthGuard implements CanActivate {
     });
 
     if (!dbUser) {
-      throw new UnauthorizedException(
-        'User not registered in application database',
-      );
+      throw new ForbiddenException({
+        code: 'PROFILE_REQUIRED',
+        message: 'Logged in but no app profile exists yet',
+      });
     }
 
     // Attach internal database user

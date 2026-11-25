@@ -8,6 +8,7 @@
  */
 
 import type { ApiErrorBody } from "../types";
+import { supabase } from "./supabase";
 
 const API_BASE = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
 
@@ -32,6 +33,11 @@ async function request<T>(
     "Content-Type": "application/json",
     ...(options.headers as Record<string, string> | undefined),
   };
+
+  if (!token) {
+    const { data } = await supabase.auth.getSession();
+    token = data.session?.access_token;
+  }
 
   if (token) {
     headers["Authorization"] = `Bearer ${token}`;
